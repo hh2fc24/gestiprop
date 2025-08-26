@@ -29,12 +29,29 @@ export default function Hero() {
 
   return (
     <section className="relative isolate overflow-hidden bg-neutral-950">
-      {/* Background image */}
-      <div
-        aria-hidden
-        className="absolute inset-0 -z-20 bg-[url('/hero-realestate.jpg')] bg-cover bg-center opacity-25 will-change-transform"
-      />
-      {/* Gradient + noise */}
+      {/* === Background videos === */}
+      <div className="absolute inset-0 -z-20 overflow-hidden">
+        {/* Primer video */}
+        <video
+          className="absolute inset-0 h-full w-full object-cover opacity-70"
+          src="/1.mp4"
+          autoPlay
+          loop
+          muted
+          playsInline
+        />
+        {/* Segundo video */}
+        <video
+          className="absolute inset-0 h-full w-full object-cover opacity-40 mix-blend-overlay"
+          src="/2.mp4"
+          autoPlay
+          loop
+          muted
+          playsInline
+        />
+      </div>
+
+      {/* === Overlay negro + ruido + spotlight === */}
       <div aria-hidden className="absolute inset-0 -z-10 bg-gradient-to-b from-black/60 via-black/75 to-black/90" />
       <div
         aria-hidden
@@ -44,7 +61,6 @@ export default function Hero() {
           backgroundSize: "24px 24px",
         }}
       />
-      {/* Spotlight */}
       <div
         aria-hidden
         className="pointer-events-none absolute inset-0 -z-10"
@@ -53,6 +69,7 @@ export default function Hero() {
         }}
       />
 
+      {/* === Content === */}
       <div className="mx-auto max-w-7xl px-6 py-28 lg:px-8 lg:py-36">
         <motion.div
           variants={badgeIn}
