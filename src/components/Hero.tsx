@@ -2,52 +2,67 @@
 
 import Link from "next/link";
 import { motion, type Variants } from "framer-motion";
-import { useState } from "react";
+import { useState, useRef } from "react";
 
 const badgeIn: Variants = {
   hidden: { opacity: 0, y: 10 },
-  show:   { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" } }
+  show: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" } }
 };
-
 const titleIn: Variants = {
   hidden: { opacity: 0, y: 18 },
-  show:   { opacity: 1, y: 0, transition: { duration: 0.7, ease: "easeOut" } }
+  show: { opacity: 1, y: 0, transition: { duration: 0.7, ease: "easeOut" } }
 };
-
 const textIn: Variants = {
   hidden: { opacity: 0, y: 16 },
-  show:   { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut", delay: 0.15 } }
+  show: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut", delay: 0.15 } }
 };
-
 const ctasIn: Variants = {
   hidden: { opacity: 0, y: 18 },
-  show:   { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut", delay: 0.25 } }
+  show: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut", delay: 0.25 } }
 };
 
 export default function Hero() {
   const [hoverPrimary, setHoverPrimary] = useState(false);
+  const [currentVideo, setCurrentVideo] = useState<1 | 2>(1);
+  const video1Ref = useRef<HTMLVideoElement>(null);
+  const video2Ref = useRef<HTMLVideoElement>(null);
+
+  const handleEnded = () => {
+    if (currentVideo === 1) {
+      setCurrentVideo(2);
+      video2Ref.current?.play();
+    } else {
+      setCurrentVideo(1);
+      video1Ref.current?.play();
+    }
+  };
 
   return (
     <section className="relative isolate overflow-hidden bg-neutral-950">
-      {/* === Background videos === */}
+      {/* === Background video secuencial === */}
       <div className="absolute inset-0 -z-20 overflow-hidden">
-        {/* Primer video */}
         <video
-          className="absolute inset-0 h-full w-full object-cover opacity-70"
+          ref={video1Ref}
+          key="v1"
+          className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-1000 ${
+            currentVideo === 1 ? "opacity-100" : "opacity-0"
+          }`}
           src="/1.mp4"
           autoPlay
-          loop
           muted
           playsInline
+          onEnded={handleEnded}
         />
-        {/* Segundo video */}
         <video
-          className="absolute inset-0 h-full w-full object-cover opacity-40 mix-blend-overlay"
+          ref={video2Ref}
+          key="v2"
+          className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-1000 ${
+            currentVideo === 2 ? "opacity-100" : "opacity-0"
+          }`}
           src="/2.mp4"
-          autoPlay
-          loop
           muted
           playsInline
+          onEnded={handleEnded}
         />
       </div>
 
@@ -69,7 +84,7 @@ export default function Hero() {
         }}
       />
 
-      {/* === Content === */}
+      {/* === Contenido === */}
       <div className="mx-auto max-w-7xl px-6 py-28 lg:px-8 lg:py-36">
         <motion.div
           variants={badgeIn}
@@ -114,7 +129,6 @@ export default function Hero() {
             onMouseLeave={() => setHoverPrimary(false)}
           >
             <span className="relative z-10">Ver propiedades</span>
-            {/* Glow */}
             <span
               aria-hidden
               className="absolute inset-0 rounded-md opacity-0 transition-opacity duration-300 group-hover:opacity-100"
